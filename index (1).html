@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>I Am Because We Are</title>
   <style>
     body, html {
@@ -10,37 +10,16 @@
       padding: 0;
       height: 100%;
       font-family: 'Segoe UI', sans-serif;
-      overflow-x: hidden;
       background: black;
       color: white;
     }
     header {
-      position: relative;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      z-index: 2;
-    }
-    header h1 {
-      font-size: 3em;
-      text-shadow: 0 0 15px white;
-      margin: 0;
-    }
-    header p {
-      font-size: 1.3em;
-      opacity: 0.8;
-    }
-    section {
-      padding: 80px 20px;
       text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-    h2 {
-      font-size: 2em;
-      margin-bottom: 20px;
     }
     .stars {
       position: fixed;
@@ -48,41 +27,33 @@
       height: 100%;
       background: url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars.png') repeat;
       animation: moveStars 200s linear infinite;
-      z-index: 0;
+      z-index: -1;
     }
     @keyframes moveStars {
       from { background-position: 0 0; }
       to { background-position: -10000px 5000px; }
     }
-    .icon {
-      font-size: 2em;
-      margin: 20px;
-      display: inline-block;
-      transition: transform 0.3s;
-    }
-    .icon:hover {
-      transform: scale(1.3);
-      color: cyan;
+    h1 { font-size: 3em; text-shadow: 0 0 10px white; }
+    p { font-size: 1.3em; opacity: 0.8; }
+    section {
+      padding: 80px 20px;
+      max-width: 900px;
+      margin: auto;
     }
     .project-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.05);
       border-radius: 10px;
       padding: 20px;
-      margin: 20px auto;
-      max-width: 800px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+      margin-bottom: 20px;
     }
     form {
-      margin-top: 30px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
       display: flex;
       flex-direction: column;
+      max-width: 500px;
+      margin: 40px auto;
     }
     form input, form textarea {
-      margin: 10px 0;
+      margin-bottom: 10px;
       padding: 10px;
       border-radius: 5px;
       border: none;
@@ -91,14 +62,13 @@
     form button {
       background: cyan;
       color: black;
-      font-weight: bold;
-      border: none;
       padding: 10px;
+      border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: bold;
     }
   </style>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const supabaseUrl = 'https://your-project-id.supabase.co';
@@ -108,16 +78,16 @@
     async function loadProjects() {
       const { data, error } = await supabase.from('projects').select('*');
       if (error) {
-        console.error('Error al cargar proyectos:', error);
+        console.error('Error:', error);
         return;
       }
       const container = document.getElementById('project-list');
       container.innerHTML = '';
-      data.forEach(project => {
-        const card = document.createElement('div');
-        card.className = 'project-card';
-        card.innerHTML = `<h3>${project.titulo}</h3><p>${project.descripcion}</p><a href="${project.link}" target="_blank">Ver proyecto</a>`;
-        container.appendChild(card);
+      data.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'project-card';
+        el.innerHTML = `<h3>${p.titulo}</h3><p>${p.descripcion}</p><a href="${p.link}" target="_blank">Ver proyecto</a>`;
+        container.appendChild(el);
       });
     }
 
@@ -126,13 +96,12 @@
       const titulo = document.getElementById('titulo').value;
       const descripcion = document.getElementById('descripcion').value;
       const link = document.getElementById('link').value;
-      const { data, error } = await supabase.from('projects').insert([{ titulo, descripcion, link }]);
+      const { error } = await supabase.from('projects').insert([{ titulo, descripcion, link }]);
       if (error) {
-        alert('Error al publicar proyecto');
-        console.error(error);
+        alert('Error al publicar');
       } else {
         alert('¡Proyecto publicado!');
-        document.getElementById('form-proyecto').reset();
+        e.target.reset();
         loadProjects();
       }
     }
@@ -145,52 +114,23 @@
 
   <header>
     <h1>I Am Because We Are</h1>
-    <p>Una fundación para la humanidad interconectada</p>
+    <p>Una red global de innovación y descubrimiento abierto</p>
   </header>
 
   <section>
-    <h2>Manifiesto</h2>
-    <p>Somos parte de una red viva. Cada ser, cada mente, cada acción importa.
-       Creemos en la ciencia abierta, la información libre y la colaboración humana.</p>
-    <div>
-      <i class="fas fa-brain icon"></i>
-      <i class="fas fa-atom icon"></i>
-      <i class="fas fa-globe icon"></i>
-    </div>
-  </section>
-
-  <section>
-    <h2>Exploración</h2>
-    <p>La innovación ocurre cuando las ideas se entrelazan como galaxias en expansión.
-       Bienvenido a un espacio donde la tecnología y la filosofía se encuentran.</p>
-    <div>
-      <i class="fas fa-satellite icon"></i>
-      <i class="fas fa-infinity icon"></i>
-      <i class="fas fa-users icon"></i>
-    </div>
-  </section>
-
-  <section>
-    <h2>Teams Global</h2>
-    <p>Un espacio para colaborar desde cualquier parte del mundo. Compartí tus ideas, descubrimientos, códigos y avances con la comunidad global.</p>
-    <div id="project-list">
-      <p>Cargando proyectos...</p>
-    </div>
-    <form id="form-proyecto" onsubmit="publicarProyecto(event)">
+    <h2>Publicar un proyecto</h2>
+    <form onsubmit="publicarProyecto(event)">
       <input type="text" id="titulo" placeholder="Título del proyecto" required />
       <textarea id="descripcion" placeholder="Descripción" required></textarea>
       <input type="url" id="link" placeholder="Enlace (opcional)" />
-      <button type="submit">📤 Publicar proyecto</button>
+      <button type="submit">📤 Publicar</button>
     </form>
   </section>
 
   <section>
-    <h2>Contacto</h2>
-    <p>Escribinos a contacto@iambecauseweare.online y sumate al universo colaborativo.</p>
-    <div>
-      <i class="fas fa-envelope icon"></i>
-      <i class="fas fa-comments icon"></i>
-      <i class="fas fa-heart icon"></i>
+    <h2>Proyectos de la comunidad</h2>
+    <div id="project-list">
+      <p>Cargando proyectos...</p>
     </div>
   </section>
 </body>
